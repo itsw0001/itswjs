@@ -5,12 +5,11 @@ var EP = 'http://localhost:8080/pns-conv/conversion/log';
 var TARGET = "about:config";
 //
 request2(file, view.rowCount);
-for( var id=0 ; id<view.rowCount; id++) {
+for( var id=0 ; id<view.rowCount ; id++) {
   data = id + ',';
-  data = data + gPrefView[id]['prefCol'] + ',';
-  data = data + gPrefView[id]['lockCol'] + ',';
-  data = data + gPrefView[id]['typeCol'] + ',';
-  data = data + gPrefView[id]['valueCol'] + ',';
+  for (var item of ["prefCol",'lockCol',"typeCol","valueCol"]) {
+     data = data + gPrefView[id][item] + ',';
+  }
   request2(file, data);
 }
 alert('END');
