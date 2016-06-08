@@ -1,0 +1,170 @@
+
+apt-get install -y xrdp
+
+vi /etc/xrdp/sesman.ini
+
+CID=`docker ps | grep ubuntu-lxde | awk '{print $1}'`
+
+docker cp km-e0010411.ini $CID:/etc/xrdp/km-0411.ini
+docker cp km-e0010411.ini $CID:/etc/xrdp/km-e0200411.ini
+docker cp km-e0010411.ini $CID:/etc/xrdp/km-e0210411.ini
+
+
+service xrdp restart
+
+
+
+https://github.com/akyshr/dockerfile-ubuntu-lxde-tigervnc/blob/master/Dockerfile
+
+https://github.com/fcwu/docker-ubuntu-vnc-desktop
+
+ubuntu:xfce.3.0
+
+docker run -p 5901:5901 -it ubuntu:latest /bin/bash
+
+apt-get -y update
+apt-get -y install xfce4
+apt-get -y install tightvncserver
+apt-get -y install language-pack-ja
+apt-get -y install fonts-vlgothic
+apt-get -y install xrdp
+cd /etc/xrdp
+xrdp-keygen xrdp
+apt-get -y install firefox
+
+export USER=root
+export LANG=ja_JP.UTF-8
+
+vncpasswd 
+
+vi /etc/xrdp/xrdp.ini
+
+[xrdp1]
+name=vnc-any
+lib=libvnc.so
+ip=127.0.0.1
+port=5901
+username=sts
+password=11111111
+
+docker run -p 13389:3389 -it ubuntu:xfce.1.2 /bin/bash
+
+echo xfce4-session >~/.xsession
+
+touch /root/.Xresources
+
+export USER=root
+export LANG=ja_JP.UTF-8
+vncserver :2 -geometry 1360x768 -depth 24
+
+xrdp --nodaemon
+
+
+
+vncserver -kill :2
+xrdp -kill 
+rm /run/xrdp/xrdp.pid
+
+
+useradd sts
+echo sts:11111111 | chpasswd
+
+mkdir -p /home/sts && chmod -R 777 /home/sts
+vncpasswd 
+
+ê›íË
+cd /etc/xdg/xfce4/xfconf/xfce-perchannel-xml
+ls -ltr 
+vi xfce4-session.xml
+
+
+
+su sts
+export USER=sts
+export LANG=ja_JP.UTF-8
+vncserver :1 -geometry 1360x768 -depth 24
+exit
+
+xrdp --nodaemon &
+
+
+https://wiki.archlinux.org/index.php/xfce
+xfconf-query -c xfce4-desktop -v --create -p /desktop-icons/style -t int -s 0
+
+
+
+@@@@@@@@@@@@@@@@@
+docker run -p 5901:5901 -it ubuntu:latest /bin/bash
+
+apt-get -y update
+apt-get -y install xfce4 tightvncserver language-pack-ja fonts-vlgothic
+
+apt-get -y install xfce4
+apt-get -y install tightvncserver
+apt-get -y install language-pack-ja
+apt-get -y install fonts-vlgothic
+
+export USER=root
+export LANG=ja_JP.UTF-8
+
+vncserver :1 -geometry 1360x768 -depth 24
+
+
+@@@@@@@@@@@
+docker run -p 13389:3389 -it ubuntu:xfce.1.0 /bin/bash
+
+apt-get -y install xrdp
+xrdp-keygen xrdp
+vncserver :1 -geometry 1360x768 -depth 24
+
+
+
+
+@@@@@@@@@@@
+docker run -p 5901:5901 -it ubuntu:latest /bin/bash
+apt-get -y update
+apt-get -y install xfce4-session
+apt-get -y install language-pack-ja
+apt-get -y install fonts-vlgothic
+apt-get -y install xrdp
+xrdp-keygen xrdp
+mv /rsakeys.ini /etc/xrdp/
+apt-get -y install language-pack-ja
+apt-get -y install fonts-vlgothic
+apt-get -y install tightvncserver
+
+export USER=root
+export LANG=ja_JP.UTF-8
+vncserver :1 -geometry 1360x768 -depth 24
+
+xrdp --nodaemon
+
+useradd sts
+echo sts:11111111 | chpasswd
+
+cat << EOF > /etc/pam.d/xrdp-sesman
+#%PAM-1.0
+auth       include      system-auth
+account    include      system-auth
+session    include      system-auth
+password   include      system-auth
+EOF
+
+xrdp --nodaemon &
+xrdp-sesman &
+
+yum -y update
+yum -y install epel-release
+yum -y install xorg-x11-server-utils
+yum -y install xorg-x11-xinit
+yum -y install tigervnc-server
+useradd sts
+echo sts:11111111 | chpasswd
+
+yum -y install gnome-session
+yum -y install firefox
+dbus-uuidgen > /var/lib/dbus/machine-id
+DISPLAY=:10
+
+
+docker cp centos_1920x1200_logoonly.jpg 6325dac6c284:/usr/share/backgrounds/default_1920x1200.png
