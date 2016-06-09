@@ -1,0 +1,30 @@
+FROM ubuntu:14.04
+MAINTAINER sts
+LABEL site=http://www.mazn.net/blog/2015/05/11/1488.html
+WORKDIR /root
+RUN apt-get update && \
+    apt-get install -y firefox && \
+    apt-get -y install xrdp && \
+    apt-get -y install lxde && \
+    echo
+RUN echo 'CREATE_HOME yes' >> /etc/login.defs && \
+    useradd ubuntu && \
+    echo 'ubuntu:11111111' | passwd && \
+    su - ubuntu && \
+    echo lxsession -s LXDE -e LXDE > ~/.xsession && \
+    exit && \
+    echo
+COPY x11rdp_0.9.0-1_amd64.deb ./
+COPY xrdp_0.9.0-1_amd64.deb ./
+COPY RDPsesconfig.sh ./
+RUN rm -f ./
+
+RUN dpkg -i x11rdp_0.9.0-1_amd64.deb && \
+    dpkg -i xrdp_0.9.0-1_amd64.deb && \
+    echo
+
+CMD 'service xrdp restsrt'
+#CMD '/etc/init.d/xrdp start'
+
+#RUN apt-get install pulseaudio
+
